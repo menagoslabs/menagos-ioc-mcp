@@ -1,0 +1,16 @@
+{
+  "data": {
+    "id": "1.2.3.4",
+    "type": "ip_address",
+    "attributes": {
+      "reputation": -88,
+      "last_analysis_stats": {
+        "harmless": 40,
+        "malicious": 35,
+        "suspicious": 5,
+        "undetected": 14,
+        "timeout": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+[project]
+name = "menagos-ioc-mcp"
+version = "0.1.0"
+description = "MCP server that fans out indicator-of-compromise lookups to VirusTotal, GreyNoise, and AbuseIPDB and returns a normalized verdict"
+authors = [{ name = "Menagos LLC" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["mcp", "threat-intel", "ioc", "virustotal", "greynoise", "abuseipdb", "claude"]
+dependencies = [
+    "fastmcp>=2,<3",
+    "httpx>=0.27,<1",
+    "pydantic>=2,<3",
+    "pydantic-settings>=2,<3",
+    "structlog>=24,<26",
+    "python-dotenv>=1,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "pytest-asyncio>=0.23,<1",
+    "respx>=0.21,<1",
+    "pytest-cov>=5,<7",
+]
+
+[project.scripts]
+menagos-ioc-mcp = "app.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/menagoslabs/menagos-ioc-mcp"
+Issues = "https://github.com/menagoslabs/menagos-ioc-mcp/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = ["ignore::DeprecationWarning"]

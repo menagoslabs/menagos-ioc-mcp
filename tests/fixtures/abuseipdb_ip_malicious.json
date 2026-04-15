@@ -1,0 +1,16 @@
+{
+  "data": {
+    "ipAddress": "1.2.3.4",
+    "isPublic": true,
+    "ipVersion": 4,
+    "isWhitelisted": false,
+    "abuseConfidenceScore": 92,
+    "countryCode": "RU",
+    "usageType": "Data Center/Web Hosting/Transit",
+    "isp": "Some ISP",
+    "domain": "example.invalid",
+    "totalReports": 147,
+    "numDistinctUsers": 63,
+    "lastReportedAt": "2026-04-12T11:22:33Z"
+  }
+}

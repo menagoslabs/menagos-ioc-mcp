@@ -1,0 +1,16 @@
+{
+  "data": {
+    "id": "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f",
+    "type": "file",
+    "attributes": {
+      "last_analysis_stats": {
+        "harmless": 0,
+        "malicious": 55,
+        "suspicious": 2,
+        "undetected": 10,
+        "timeout": 0
+      },
+      "reputation": -100
+    }
+  }
+}

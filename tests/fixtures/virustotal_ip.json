@@ -1,0 +1,18 @@
+{
+  "data": {
+    "id": "8.8.8.8",
+    "type": "ip_address",
+    "attributes": {
+      "reputation": 412,
+      "last_analysis_stats": {
+        "harmless": 78,
+        "malicious": 0,
+        "suspicious": 0,
+        "undetected": 16,
+        "timeout": 0
+      },
+      "country": "US",
+      "as_owner": "GOOGLE"
+    }
+  }
+}
