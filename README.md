@@ -40,13 +40,16 @@ URL lookups are not supported in v0.1. They're deferred to v0.2.
 ## Project Structure
 
 ```
-app/            Package (config, indicator, schema, scoring, providers, lookup, server)
-tests/          pytest suite + JSON fixtures
-scripts/        demo.sh and client_example.py
-docs/           Architecture, integration guides, limitations
+app/            Python package (config, indicator, schema, scoring, providers, lookup, server)
+frontend/      Web UI (Vite + React + TypeScript + Tailwind)
+tests/         pytest suite + JSON fixtures
+scripts/       demo.sh and client_example.py
+docs/          Architecture, integration guides, limitations
 ```
 
 ## Development
+
+### Backend
 
 ```bash
 # Install (editable, with dev extras)
@@ -55,7 +58,7 @@ make install-dev
 # Run as MCP stdio server (what Claude Desktop / Claude Code will spawn)
 make stdio
 
-# Run as local HTTP server on 127.0.0.1:8765 (for testing and other agents)
+# Run as local HTTP server on 127.0.0.1:8765 (MCP + REST API, for the web UI and other agents)
 make serve
 
 # Run the test suite
@@ -63,6 +66,32 @@ make test
 
 # Run tests with coverage
 make test-cov
+```
+
+The HTTP server exposes both the MCP endpoint (for agents) and a small REST API:
+
+- `GET /api/health` — liveness check
+- `GET /api/lookup?indicator=8.8.8.8` — JSON `LookupResponse` (same as the MCP tool)
+
+### Web UI
+
+A Vite + React + TypeScript + Tailwind frontend for visualizing lookups. Requires Node 18+.
+
+```bash
+# Install JS deps (one time)
+make ui-install
+
+# Start backend in terminal A
+make serve
+
+# Start frontend dev server in terminal B (http://localhost:5173)
+make ui-dev
+```
+
+The dev server proxies `/api/*` to the backend, so there's nothing to configure. For a production build:
+
+```bash
+make ui-build        # writes frontend/dist/
 ```
 
 ## Integrations

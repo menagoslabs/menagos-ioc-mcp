@@ -41,9 +41,12 @@ If the upstream returns HTTP 429, the provider is marked `rate_limited` for that
 
 Be aware of the free tiers:
 
-- **VirusTotal** public API: ~4 requests/minute, 500/day
-- **GreyNoise Community**: subject to their community rate limits
-- **AbuseIPDB**: ~1000 checks/day on the free tier
+- **VirusTotal** public API: ~4 requests/minute, 500/day. Key is required.
+- **GreyNoise Community**: ~50 lookups/week (combined with Visualizer usage).
+  A key is optional — the adapter will make unauthenticated requests if
+  `GREYNOISE_API_KEY` is empty. Authenticated calls may get slightly higher
+  quotas.
+- **AbuseIPDB**: ~1000 checks/day on the free tier. Key is required.
 
 ## Caching
 

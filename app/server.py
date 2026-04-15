@@ -1,10 +1,18 @@
-"""FastMCP server — registers the lookup_ioc tool and picks a transport."""
+"""FastMCP server — registers the lookup_ioc tool and picks a transport.
+
+Also exposes a small REST JSON API (`/api/lookup`, `/api/health`) alongside
+the MCP endpoint so a web frontend can drive the same LookupService. Both
+surfaces call into the same code path — MCP and the REST API are two views
+of one service.
+"""
 
 from __future__ import annotations
 
 from typing import Any
 
 from fastmcp import FastMCP
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from app import __version__
 from app.config import get_settings
@@ -31,6 +39,56 @@ def _get_service() -> LookupService:
     if _service is None:
         _service = LookupService()
     return _service
+
+
+_CORS_HEADERS = {
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, OPTIONS",
+    "access-control-allow-headers": "content-type",
+}
+
+
+def _cors(body: Any, status: int = 200) -> JSONResponse:
+    return JSONResponse(body, status_code=status, headers=_CORS_HEADERS)
+
+
+@mcp.custom_route("/api/health", methods=["GET", "OPTIONS"])
+async def health(_request: Request) -> JSONResponse:
+    return _cors({"status": "ok", "version": __version__})
+
+
+@mcp.custom_route("/api/lookup", methods=["GET", "OPTIONS"])
+async def api_lookup(request: Request) -> JSONResponse:
+    """REST wrapper around LookupService. Used by the web UI.
+
+    Query params:
+        indicator: the IP, domain, or hash to look up (required).
+    """
+    if request.method == "OPTIONS":
+        return _cors({})
+
+    indicator = (request.query_params.get("indicator") or "").strip()
+    if not indicator:
+        return _cors(
+            {"error": "missing_indicator", "message": "query param 'indicator' is required"},
+            status=400,
+        )
+
+    service = _get_service()
+    try:
+        response = await service.lookup(indicator)
+        return _cors(response.model_dump(mode="json"))
+    except InvalidIndicatorError as e:
+        return _cors(
+            {"error": "invalid_indicator", "message": str(e)},
+            status=400,
+        )
+    except Exception as e:  # pragma: no cover — last-resort safety net
+        log.exception("api_lookup_unexpected_error")
+        return _cors(
+            {"error": "internal", "message": f"{e.__class__.__name__}: {e}"},
+            status=500,
+        )
 
 
 @mcp.tool

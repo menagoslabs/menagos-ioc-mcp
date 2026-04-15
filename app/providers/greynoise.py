@@ -8,7 +8,6 @@ from typing import ClassVar
 from app.indicator import IndicatorType
 from app.providers.base import (
     Provider,
-    ProviderAuthError,
     ProviderNotFoundError,
     ProviderRateLimitedError,
 )
@@ -32,10 +31,14 @@ class GreyNoiseProvider(Provider):
     async def _fetch(self, value: str, itype: IndicatorType) -> SourceReport:
         start = time.perf_counter()
         api_key = self.settings.greynoise_api_key.get_secret_value()
-        if not api_key:
-            raise ProviderAuthError("GREYNOISE_API_KEY not configured")
 
-        headers = {"key": api_key, "accept": "application/json"}
+        # The Community API also accepts unauthenticated requests — the key
+        # header is optional. Authenticated calls get slightly higher quotas,
+        # but an empty key is valid and does not raise here.
+        headers: dict[str, str] = {"accept": "application/json"}
+        if api_key:
+            headers["key"] = api_key
+
         url = f"{_BASE}/{value}"
 
         resp = await self.http.get(

@@ -1,4 +1,4 @@
-.PHONY: install install-dev stdio serve test test-cov demo clean
+.PHONY: install install-dev stdio serve test test-cov demo ui-install ui-dev ui-build clean
 
 install:
 	uv pip install -e .
@@ -21,6 +21,15 @@ test-cov:
 demo:
 	bash scripts/demo.sh
 
+ui-install:
+	cd frontend && npm install
+
+ui-dev:
+	cd frontend && npm run dev
+
+ui-build:
+	cd frontend && npm run build
+
 clean:
-	rm -rf .pytest_cache .coverage coverage.xml htmlcov dist build *.egg-info
+	rm -rf .pytest_cache .coverage coverage.xml htmlcov dist build *.egg-info frontend/dist frontend/.vite
 	find . -type d -name __pycache__ -exec rm -rf {} +

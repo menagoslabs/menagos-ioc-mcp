@@ -46,9 +46,12 @@ class AbuseIPDBProvider(Provider):
         total_reports = int(data.get("totalReports", 0) or 0)
 
         score = abuse_score / 100.0
+        # Classification tracks abuse *confidence*, not raw report count.
+        # Well-known infrastructure like 8.8.8.8 always has some stray reports
+        # that weren't verified as abuse — we don't want to call that suspicious.
         if abuse_score >= 50:
             classification = Classification.MALICIOUS
-        elif abuse_score >= 20 or total_reports > 0:
+        elif abuse_score >= 20:
             classification = Classification.SUSPICIOUS
         else:
             classification = Classification.BENIGN

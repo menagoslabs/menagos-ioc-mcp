@@ -1,7 +1,9 @@
 import httpx
 import pytest
 import respx
+from pydantic import SecretStr
 
+from app.config import Settings
 from app.indicator import IndicatorType
 from app.providers.greynoise import GreyNoiseProvider
 from app.schema import Classification, SourceStatus
@@ -51,3 +53,30 @@ async def test_greynoise_rejects_domain(settings):
         p = GreyNoiseProvider(http, settings)
         report = await p.lookup("example.com", IndicatorType.DOMAIN)
     assert report.status == SourceStatus.UNSUPPORTED
+
+
+@respx.mock
+async def test_greynoise_unauthenticated_when_key_empty():
+    """The Community API accepts anonymous requests — an empty key must not
+    trigger an auth error, and the adapter must not send a `key` header.
+    """
+    unauth_settings = Settings(
+        VT_API_KEY=SecretStr("x"),
+        GREYNOISE_API_KEY=SecretStr(""),  # explicitly blank
+        ABUSEIPDB_API_KEY=SecretStr("x"),
+        PROVIDER_RATE_LIMIT_PER_MIN=600,
+        LOG_LEVEL="WARNING",
+    )
+
+    route = respx.get("https://api.greynoise.io/v3/community/8.8.8.8").mock(
+        return_value=httpx.Response(200, json=load_fixture("greynoise_ip.json"))
+    )
+
+    async with httpx.AsyncClient() as http:
+        p = GreyNoiseProvider(http, unauth_settings)
+        report = await p.lookup("8.8.8.8", IndicatorType.IP)
+
+    assert report.status == SourceStatus.OK
+    # No `key` header should have been sent on the anonymous call.
+    sent_headers = {k.lower(): v for k, v in route.calls.last.request.headers.items()}
+    assert "key" not in sent_headers

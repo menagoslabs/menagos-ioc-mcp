@@ -17,3 +17,8 @@ htmlcov/
 .DS_Store
 *.swp
 *.swo
+
+# frontend (Vite / Node)
+node_modules/
+frontend/dist/
+frontend/.vite/
