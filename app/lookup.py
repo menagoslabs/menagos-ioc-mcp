@@ -120,7 +120,7 @@ class LookupService:
 
     async def lookup(self, value: str) -> LookupResponse:
         """Main entry point. Classifies, fans out, aggregates. Never raises for
-        valid indicators — only raises InvalidIndicatorError for garbage input.
+        valid indicators, only raises InvalidIndicatorError for garbage input.
         """
         query_id = uuid.uuid4().hex[:12]
         overall_start = time.perf_counter()

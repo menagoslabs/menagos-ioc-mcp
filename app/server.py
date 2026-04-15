@@ -1,8 +1,8 @@
-"""FastMCP server — registers the lookup_ioc tool and picks a transport.
+"""FastMCP server: registers the lookup_ioc tool and picks a transport.
 
 Also exposes a small REST JSON API (`/api/lookup`, `/api/health`) alongside
 the MCP endpoint so a web frontend can drive the same LookupService. Both
-surfaces call into the same code path — MCP and the REST API are two views
+surfaces call into the same code path; MCP and the REST API are two views
 of one service.
 """
 
@@ -83,7 +83,7 @@ async def api_lookup(request: Request) -> JSONResponse:
             {"error": "invalid_indicator", "message": str(e)},
             status=400,
         )
-    except Exception as e:  # pragma: no cover — last-resort safety net
+    except Exception as e:  # pragma: no cover, last-resort safety net
         log.exception("api_lookup_unexpected_error")
         return _cors(
             {"error": "internal", "message": f"{e.__class__.__name__}: {e}"},

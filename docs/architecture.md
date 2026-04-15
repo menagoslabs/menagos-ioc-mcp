@@ -9,7 +9,7 @@
 | `app/indicator.py` | `IndicatorType` enum + `classify(value)` + `normalize(value, itype)`. Raises `InvalidIndicatorError` on garbage input. |
 | `app/schema.py` | pydantic v2 models for the normalized response: `Indicator`, `SourceReport`, `Verdict`, `ErrorEntry`, `Meta`, `LookupResponse`. |
 | `app/scoring.py` | `aggregate(reports) -> Verdict`. Averages reputation across OK providers, derives classification from thresholds, derives confidence from coverage. |
-| `app/rate_limit.py` | In-process async token bucket per provider. Fails fast instead of blocking — a provider over quota is reported as `status="rate_limited"`. |
+| `app/rate_limit.py` | In-process async token bucket per provider. Fails fast instead of blocking: a provider over quota is reported as `status="rate_limited"`. |
 | `app/providers/base.py` | `Provider` ABC, `SourceReport` contract, `ProviderError` hierarchy. The public `lookup()` method catches all exceptions and always returns a `SourceReport` so the orchestrator can rely on the invariant. |
 | `app/providers/virustotal.py` | VT v3 API for IPs, domains, and file hashes (MD5/SHA1/SHA256). |
 | `app/providers/greynoise.py` | GreyNoise Community API, IP-only. RIOT hits are explicitly pinned to benign. |
@@ -49,7 +49,7 @@ LookupResponse { indicator, verdict, sources, errors, meta }
 
 ## Scoring Rules
 
-**Per-provider score normalization** — each adapter produces a float in `[0.0, 1.0]` where `0 = clean`, `1 = malicious`.
+**Per-provider score normalization.** Each adapter produces a float in `[0.0, 1.0]` where `0 = clean`, `1 = malicious`.
 
 - **VirusTotal**: `(malicious + 0.5 * suspicious) / total_analyses`. Classification follows: `>= 0.5` → malicious, `> 0` → suspicious, `== 0` → benign.
 - **GreyNoise**: string classification (`benign`/`unknown`/`suspicious`/`malicious`) mapped to `0.0 / 0.3 / 0.6 / 0.95`. RIOT-without-noise is pinned to benign regardless of classification string.

@@ -2,7 +2,7 @@
 
 Two ways to wire this server into Claude Code: as a stdio subprocess (recommended), or as a local HTTP endpoint (useful when you want to share the same server with other clients).
 
-## Option 1 — stdio (recommended)
+## Option 1: stdio (recommended)
 
 ```bash
 git clone https://github.com/menagoslabs/menagos-ioc-mcp.git
@@ -23,7 +23,7 @@ Then in a Claude Code session:
 
 > Call the lookup_ioc tool on 8.8.8.8
 
-## Option 2 — local HTTP
+## Option 2: local HTTP
 
 If you want a long-running server (e.g. so `scripts/client_example.py` or another agent can hit it), start it in one terminal:
 

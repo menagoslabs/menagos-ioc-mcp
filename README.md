@@ -16,7 +16,7 @@ make demo                    # installs, starts the server, runs a sample lookup
 
 ## What It Does
 
-- Accepts one indicator (IP v4/v6, domain, or file hash — MD5/SHA1/SHA256)
+- Accepts one indicator (IP v4/v6, domain, or file hash in MD5/SHA1/SHA256 form)
 - Classifies the indicator type
 - Queries every provider that supports that type in parallel
 - Normalizes each provider's response into a shared `SourceReport` shape
@@ -70,8 +70,8 @@ make test-cov
 
 The HTTP server exposes both the MCP endpoint (for agents) and a small REST API:
 
-- `GET /api/health` — liveness check
-- `GET /api/lookup?indicator=8.8.8.8` — JSON `LookupResponse` (same as the MCP tool)
+- `GET /api/health`: liveness check
+- `GET /api/lookup?indicator=8.8.8.8`: JSON `LookupResponse` (same as the MCP tool)
 
 ### Web UI
 
@@ -100,7 +100,7 @@ make ui-build        # writes frontend/dist/
 - **Claude Code**: see [docs/claude-code.md](docs/claude-code.md)
 - **Use from another agent**: see [scripts/client_example.py](scripts/client_example.py)
 
-Quick version for Claude Desktop — add to `claude_desktop_config.json`:
+Quick version for Claude Desktop. Add this to `claude_desktop_config.json`:
 
 ```json
 {
@@ -156,14 +156,14 @@ Field definitions live in [app/schema.py](app/schema.py) and [docs/architecture.
 
 ## Documentation
 
-- [Architecture](docs/architecture.md) — modules, data flow, scoring rules
+- [Architecture](docs/architecture.md): modules, data flow, scoring rules
 - [Claude Desktop integration](docs/claude-desktop.md)
 - [Claude Code integration](docs/claude-code.md)
-- [Limitations](docs/limitations.md) — rate limits, provider coverage, known gaps
+- [Limitations](docs/limitations.md): rate limits, provider coverage, known gaps
 
 ## Remote Exposure (optional)
 
-This repo is deliberately local-first. If you want `menagos-ioc-mcp` reachable from a remote agent, wrap the HTTP transport with your own reverse proxy and auth — Tailscale, Cloudflare Tunnel, Nginx + bearer token, or whatever your environment already trusts. No opinionated infra ships here.
+This repo is deliberately local-first. If you want `menagos-ioc-mcp` reachable from a remote agent, wrap the HTTP transport with your own reverse proxy and auth layer of choice: Tailscale, Cloudflare Tunnel, Nginx + bearer token, or whatever your environment already trusts. No opinionated infra ships here.
 
 ## Important
 

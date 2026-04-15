@@ -128,7 +128,7 @@ function RawSignals({
 }
 
 function formatValue(v: unknown): string {
-  if (v === null || v === undefined) return "—";
+  if (v === null || v === undefined) return "-";
   if (typeof v === "boolean") return v ? "true" : "false";
   if (typeof v === "number" || typeof v === "string") return String(v);
   return JSON.stringify(v);

@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Web UI for menagos-ioc-mcp — visualize IOC lookups",
+  "description": "Web UI for visualizing menagos-ioc-mcp lookups",
   "author": "Menagos LLC",
   "license": "MIT",
   "scripts": {

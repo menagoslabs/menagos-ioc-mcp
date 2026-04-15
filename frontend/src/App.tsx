@@ -94,7 +94,7 @@ export default function App() {
                     {state.data.errors.map((e, i) => (
                       <li key={i}>
                         <span className="text-slate-500">{e.provider}:</span>{" "}
-                        <span className="text-slate-400">{e.error_type}</span> — {e.message}
+                        <span className="text-slate-400">{e.error_type}</span>, {e.message}
                       </li>
                     ))}
                   </ul>

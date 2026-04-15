@@ -59,7 +59,7 @@ class Provider(ABC):
         """
 
     async def lookup(self, value: str, itype: IndicatorType) -> SourceReport:
-        """Public entry point. Never raises — always returns a SourceReport.
+        """Public entry point. Never raises, always returns a SourceReport.
 
         The orchestrator depends on this invariant.
         """
@@ -111,7 +111,7 @@ class Provider(ABC):
                 start=start,
                 error_message=f"http error: {e.__class__.__name__}",
             )
-        except Exception as e:  # pragma: no cover — last-resort safety net
+        except Exception as e:  # pragma: no cover, last-resort safety net
             return self._failure_report(
                 status=SourceStatus.ERROR,
                 start=start,

@@ -1,4 +1,4 @@
-"""Smoke tests for the FastMCP server — tool registration and a direct call."""
+"""Smoke tests for the FastMCP server: tool registration and a direct call."""
 
 import httpx
 import respx

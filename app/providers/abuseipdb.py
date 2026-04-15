@@ -48,7 +48,7 @@ class AbuseIPDBProvider(Provider):
         score = abuse_score / 100.0
         # Classification tracks abuse *confidence*, not raw report count.
         # Well-known infrastructure like 8.8.8.8 always has some stray reports
-        # that weren't verified as abuse — we don't want to call that suspicious.
+        # that weren't verified as abuse, we don't want to call that suspicious.
         if abuse_score >= 50:
             classification = Classification.MALICIOUS
         elif abuse_score >= 20:

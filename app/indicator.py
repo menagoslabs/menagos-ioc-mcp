@@ -51,7 +51,7 @@ def _is_domain(value: str) -> bool:
     if not _DOMAIN_RE.match(value):
         return False
     # Reject things that parse as an IP (e.g., "1.2.3.4" matches domain regex
-    # with a numeric TLD — but our TLD rule is [a-zA-Z]{2,}, so IPs already won't match).
+    # with a numeric TLD, but our TLD rule is [a-zA-Z]{2,}, so IPs already won't match).
     return not _is_ip(value)
 
 
@@ -64,7 +64,7 @@ def classify(value: str) -> IndicatorType:
     if not v:
         raise InvalidIndicatorError("indicator is empty")
 
-    # Hashes first — cheapest check, unambiguous.
+    # Hashes first, cheapest check, unambiguous.
     if _MD5_RE.match(v):
         return IndicatorType.HASH_MD5
     if _SHA1_RE.match(v):

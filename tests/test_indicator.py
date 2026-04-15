@@ -45,7 +45,7 @@ def test_classify_valid(value: str, expected: IndicatorType) -> None:
         "example.",
         "999.999.999.999",  # invalid IP octets
         "abc",  # no TLD
-        "1234567890abcdef",  # 16 hex — not a valid hash length
+        "1234567890abcdef",  # 16 hex, not a valid hash length
     ],
 )
 def test_classify_invalid(value: str) -> None:

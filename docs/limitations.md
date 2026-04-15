@@ -4,7 +4,7 @@ This document is deliberately blunt about what `menagos-ioc-mcp` does not do. Re
 
 ## Not a ground-truth oracle
 
-`lookup_ioc` reports what VirusTotal, GreyNoise, and AbuseIPDB say about an indicator at a single point in time. None of those sources is authoritative on its own, and the aggregated verdict is a weighted average — not a legal ruling. Treat it as one input among many.
+`lookup_ioc` reports what VirusTotal, GreyNoise, and AbuseIPDB say about an indicator at a single point in time. None of those sources is authoritative on its own, and the aggregated verdict is a weighted average rather than a legal ruling. Treat it as one input among many.
 
 ## Indicator coverage
 
@@ -16,7 +16,7 @@ v0.1 supports:
 
 v0.1 does **not** support:
 
-- URLs (VirusTotal requires a base64url-encoded URL ID — deferred to v0.2)
+- URLs (VirusTotal requires a base64url-encoded URL ID; deferred to v0.2)
 - CIDR ranges
 - Email addresses
 - Mutexes, registry keys, or other host-based artifacts
@@ -31,11 +31,11 @@ Invalid input returns a structured `{"error": "invalid_indicator", ...}` payload
 | GreyNoise (Community) | ✅ | ❌ | ❌ | ❌ |
 | AbuseIPDB  | ✅ | ❌ | ❌ | ❌ |
 
-For a domain lookup, only VirusTotal responds — the other two report `status="unsupported"`. For a hash lookup, only VirusTotal responds. The orchestrator excludes unsupported reports from the verdict math so the coverage ratio stays honest.
+For a domain lookup, only VirusTotal responds; the other two report `status="unsupported"`. For a hash lookup, only VirusTotal responds. The orchestrator excludes unsupported reports from the verdict math so the coverage ratio stays honest.
 
 ## Rate limits
 
-Each provider has its own upstream quota. The server uses an in-process token bucket per provider (default 60 requests/minute, configurable via `PROVIDER_RATE_LIMIT_PER_MIN`). When the bucket is empty, the provider is skipped with `status="rate_limited"` instead of blocking — confidence on the overall verdict is downgraded accordingly.
+Each provider has its own upstream quota. The server uses an in-process token bucket per provider (default 60 requests/minute, configurable via `PROVIDER_RATE_LIMIT_PER_MIN`). When the bucket is empty, the provider is skipped with `status="rate_limited"` instead of blocking, and confidence on the overall verdict is downgraded accordingly.
 
 If the upstream returns HTTP 429, the provider is marked `rate_limited` for that single call. There is no in-memory retry loop; the next agent call will try again.
 
@@ -43,7 +43,7 @@ Be aware of the free tiers:
 
 - **VirusTotal** public API: ~4 requests/minute, 500/day. Key is required.
 - **GreyNoise Community**: ~50 lookups/week (combined with Visualizer usage).
-  A key is optional — the adapter will make unauthenticated requests if
+  A key is optional. The adapter will make unauthenticated requests if
   `GREYNOISE_API_KEY` is empty. Authenticated calls may get slightly higher
   quotas.
 - **AbuseIPDB**: ~1000 checks/day on the free tier. Key is required.

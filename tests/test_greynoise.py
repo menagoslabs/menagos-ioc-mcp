@@ -57,7 +57,7 @@ async def test_greynoise_rejects_domain(settings):
 
 @respx.mock
 async def test_greynoise_unauthenticated_when_key_empty():
-    """The Community API accepts anonymous requests — an empty key must not
+    """The Community API accepts anonymous requests, an empty key must not
     trigger an auth error, and the adapter must not send a `key` header.
     """
     unauth_settings = Settings(

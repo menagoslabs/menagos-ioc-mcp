@@ -87,7 +87,7 @@ export function indicatorTypeLabel(t: string): string {
 }
 
 export function formatScore(score: number | null): string {
-  if (score === null || score === undefined) return "—";
+  if (score === null || score === undefined) return "-";
   return score.toFixed(2);
 }
 

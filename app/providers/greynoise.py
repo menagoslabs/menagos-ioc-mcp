@@ -32,7 +32,7 @@ class GreyNoiseProvider(Provider):
         start = time.perf_counter()
         api_key = self.settings.greynoise_api_key.get_secret_value()
 
-        # The Community API also accepts unauthenticated requests — the key
+        # The Community API also accepts unauthenticated requests, the key
         # header is optional. Authenticated calls get slightly higher quotas,
         # but an empty key is valid and does not raise here.
         headers: dict[str, str] = {"accept": "application/json"}
